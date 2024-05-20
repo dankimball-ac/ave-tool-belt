@@ -131,12 +131,12 @@ export default function Topbar() {
         }}
       >
         <DropDownButton
-          title="Manuals"
+          title="Tool"
           icon={<InfoOutlinedIcon />}
           menuItems={documentItems}
         />
         <DropDownButton
-          title="Info"
+          title="Tool"
           icon={<InfoOutlinedIcon />}
           menuItems={infoItems}
         />
