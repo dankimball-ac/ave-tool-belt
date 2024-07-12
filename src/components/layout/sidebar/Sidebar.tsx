@@ -1,14 +1,16 @@
 import { useSidebarStore } from "@/stores/sidebar";
-import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
-import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
-import DatasetOutlinedIcon from "@mui/icons-material/DatasetOutlined";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import ForkLeftOutlinedIcon from "@mui/icons-material/ForkLeftOutlined";
-import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
-import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
-import TrafficOutlinedIcon from "@mui/icons-material/TrafficOutlined";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+// import AddchartOutlinedIcon from "@mui/icons-material/AddchartOutlined";
+// import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
+// import DatasetOutlinedIcon from "@mui/icons-material/DatasetOutlined";
+// import FileDownloadIcon from "@mui/icons-material/FileDownload";
+// import ForkLeftOutlinedIcon from "@mui/icons-material/ForkLeftOutlined";
+// import RouteOutlinedIcon from "@mui/icons-material/RouteOutlined";
+// import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
+// import MapIcon from '@mui/icons-material/Map';
 import {
   Box,
+  Collapse,
   Drawer,
   List,
   ListItem,
@@ -26,30 +28,25 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 function MenuItem({
-  icon,
   text,
   url,
+  selectedOption,
   setSelectedOption,
-}: // leftPadding = false,
-{
-  icon: React.ReactNode;
-  text: string;
-  url: string;
-  selectedOption: string;
-  setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
-  leftPadding?: boolean;
+  leftPadding = false,
 }) {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { closeSideBar } = useSidebarStore();
+
   const handleClick = () => {
     setSelectedOption(text);
-
+    closeSideBar();
     if (isMobile) {
       closeSideBar();
     }
   };
+
   const isSelected = router.pathname === url;
   const baseColor = theme.palette.primary.main;
 
@@ -74,7 +71,6 @@ function MenuItem({
           },
         }}
       >
-        <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText>
           <Typography fontWeight={400}>{text}</Typography>
         </ListItemText>
@@ -83,58 +79,38 @@ function MenuItem({
   );
 }
 
-function SubMenu({
-  // title,
-  // icon,
-  children,
-  subheader,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-  subheader: string;
-}) {
+function SubMenu({ title, children }) {
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
-
   return (
     <>
-      {/* <ListItemButton
-        onClick={handleClick}
-        sx={{ '&:hover': { backgroundColor: '#f0f0f0' } }}
-      >
-        <ListItemIcon>{icon}</ListItemIcon>
-        <ListItemText>
-          <Typography fontWeight={400}>{title}</Typography>
-        </ListItemText>
+      <ListItemButton onClick={handleClick}>
+        <ListItemText primary={title} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit> */}
-      <List
-        component="div"
-        disablePadding
-        subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            {subheader}
-          </ListSubheader>
-        }
-      >
-        {children}
-      </List>
-      {/* </Collapse> */}
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List
+          component="div"
+          disablePadding
+          // subheader={
+          //   <ListSubheader component="div" id="nested-list-subheader">
+          //     {subheader}
+          //   </ListSubheader>
+          // }
+        >
+          {children}
+        </List>
+      </Collapse>
     </>
   );
-}
-{
-  /* <Collapse in={false} timeout="auto" orientation="horizontal" unmountOnExit> */
 }
 
 export default function Sidebar() {
   const theme = useTheme();
-  const [selectedOption, setSelectedOption] = useState("Locations");
+  const [selectedOption, setSelectedOption] = useState("/");
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { isSidebarOpen, toggleSidebar, closeSideBar, openSideBar } =
     useSidebarStore();
@@ -147,7 +123,7 @@ export default function Sidebar() {
         closeSideBar();
       }, 0);
     } else {
-      openSideBar();
+      closeSideBar();
     }
     return () => clearTimeout(timer);
   }, [isMobile, closeSideBar, openSideBar]);
@@ -173,104 +149,92 @@ export default function Sidebar() {
         overflow: "hidden",
       }}
     >
-      <Drawer
+   <Drawer
         variant={drawerVariant}
         open={isSidebarOpen}
         onClose={toggleMobileDrawer()}
         anchor="left"
         PaperProps={{
           sx: {
+            width: "270px",
+            height: 'calc(100% - 64px)', // Adjust this value based on your topbar height
+            top: 64, // Should match your topbar height
             transform: isSidebarOpen ? "translateX(0)" : "translateX(-270px)",
             transition: "transform 0.2s ease-out",
             backgroundColor: theme.palette.background.paper,
-            border: "none",
-            boxShadow: "2",
-            width: "270px",
+            border: 'none',
+            boxShadow: 2,
           },
         }}
+        ModalProps={{
+          keepMounted: true,
+        }}
       >
-        <Box
-          sx={{
-            width: "200px",
-            margin: "20px",
-            marginX: "auto",
-          }}
-        >
-          <NextLink href="/" passHref>
-            <Image
-              alt="Ave Toolbelt"
-              src="/images/avelogo.svg"
-              priority
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: "100%", height: "auto", cursor: "pointer" }}
-            />
-          </NextLink>
-        </Box>
+
         <List>
-          <MenuItem
-            icon={<TrafficOutlinedIcon />}
-            text={"Derek's blackmail photos"}
-            url={"/locations"}
+          {/* <SubMenu title="Apps" subheader="Apps" /> */}
+          {/* <SubMenu title={"Civil Engineering"}>
+            <MenuItem
+              text={"Tool Name"}
+              url={"/civil-eng/tool-name"}
+              sx={{ fontSize: "15px" }}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              leftPadding
+            />
+          </SubMenu>
+          <SubMenu
+            title={"Drone Mapping"}
+            url={"/tools/drone-mapping"}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
             leftPadding
           />
-          <SubMenu
-            subheader={"Dev Team"}
-            title="Design Tools"
-            icon={<BuildOutlinedIcon />}
-          >
+          <SubMenu title={"Environmental Planning"} /> */}
+          <SubMenu title={"Equity & Inclusion "}>
             <MenuItem
-              icon={<ShowChartOutlinedIcon />}
-              text={"Morgans Pinball collection"}
-              url={"/tools/time-space-diagrams"}
+              text={"White Male Privilege Gauge"}
+              url={"/public-involvement/pi-tool/projects"}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
-              leftPadding
+              style={{ paddingLeft: "15px" }}
             />
             <MenuItem
-              icon={<RouteOutlinedIcon />}
-              text={"Jacksons New Book"}
-              url={"/jackson"}
+              text={"Intersectionality Test"}
+              url={"/public-involvement/pi-tool/projects"}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
-              leftPadding
+              style={{ paddingLeft: "15px" }}
             />
             <MenuItem
-              icon={<ForkLeftOutlinedIcon />}
-              text={"Jai's Delight"}
-              url={"/tools/left-turn-gap-report"}
+              text={"White Male Complaint Tool"}
+              url={"/public-involvement/pi-tool/projects"}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
-              leftPadding
+              style={{ paddingLeft: "15px" }}
             />
           </SubMenu>
-          <SubMenu
-            subheader={"Traffic Tools"}
-            title={"Data"}
-            icon={<DatasetOutlinedIcon />}
-          >
-            <MenuItem
-              icon={<AddchartOutlinedIcon />}
-              text={"Dan Kimball Fan Page"}
-              url={"/data/aggregate"}
+          {/* <SubMenu title={"GIS"} />
+          <SubMenu title={"Graphic Storytelling"} />
+          <SubMenu title={"Land Surveying"} />
+          <SubMenu title={"Owner's Representation"} />
+          <SubMenu title={"Planning"} /> */}
+          {/* <SubMenu title={"Public Involvement"}>
+    
+          </SubMenu> */}
+          <MenuItem
+              text={"PI Tool"}
+              url={"/public-involvement/pi-tool/projects"}
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
-              leftPadding
+              style={{ paddingLeft: "15px" }}
             />
-            <MenuItem
-              icon={<FileDownloadIcon />}
-              text={"Useful Avenue Tool"}
-              url={"/data/export"}
-              selectedOption={selectedOption}
-              setSelectedOption={setSelectedOption}
-              leftPadding
-            />
-          </SubMenu>
+          {/* <SubMenu title={"Right of Way Design"} />
+          <SubMenu title={"Traffic Engineering"} />
+          <SubMenu title={"Traffic Studies"} />
+          <SubMenu title={"Transport Planning & Design"} /> */}
+          {/* </SubMenu> */}
         </List>
-
         <Box
           sx={{
             marginTop: "auto",
@@ -281,6 +245,20 @@ export default function Sidebar() {
           }}
         ></Box>
       </Drawer>
+      {isSidebarOpen && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 64, // Should match your topbar height
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: theme.zIndex.drawer - 1,
+          }}
+          onClick={closeSideBar}
+        />
+      )}
     </Box>
   );
 }

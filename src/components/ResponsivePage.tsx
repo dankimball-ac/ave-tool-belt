@@ -27,7 +27,6 @@ export const ResponsivePageLayout = ({
       }}
     >
       <Head>
-        <title>{title}</title>
       </Head>
       <Box sx={{ mb: noBottomMargin ? 0 : 3 }}>
         <Header title={title} />

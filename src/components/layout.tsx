@@ -2,7 +2,7 @@ import Sidebar from '@/components/layout/sidebar/Sidebar'
 import Toast from '@/components/toast'
 import { useSidebarStore } from '@/stores/sidebar'
 import { Box, useTheme } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Topbar from './layout/topbar'
 
 interface LayoutProps {
@@ -13,6 +13,19 @@ export default function Layout({ children }: LayoutProps) {
   const theme = useTheme()
   const { isSidebarOpen } = useSidebarStore()
 
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'visible'
+    }
+    return () => {
+      document.body.style.overflow = 'visible'
+    }
+  }, [isSidebarOpen])
+
+  
+  
   return (
     <Box
       className="app"
@@ -21,9 +34,7 @@ export default function Layout({ children }: LayoutProps) {
         // backgroundColor: theme.palette.background.paper,
       }}
     >
-      <Box component="nav">
-        <Sidebar />
-      </Box>
+
       <Box
         component="main"
         className="content"
@@ -32,9 +43,10 @@ export default function Layout({ children }: LayoutProps) {
         }}
       >
         <Topbar />
+        
         <Box
           sx={{
-            padding: theme.spacing(3),
+         
             minHeight: `calc(100vh - 73px)`,
             width: '100%',
             transition: 'width 0.3s ease-out',
@@ -48,6 +60,9 @@ export default function Layout({ children }: LayoutProps) {
         >
           {children}
         </Box>
+        <Box component="nav">
+        <Sidebar />
+      </Box>
         <Toast />
       </Box>
     </Box>

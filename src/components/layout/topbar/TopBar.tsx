@@ -1,14 +1,17 @@
 import { useGetAdminPagesList } from '@/features/identity/pagesCheck'
 import { useSidebarStore } from '@/stores/sidebar'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import MenuOpenOutlinedIcon from '@mui/icons-material/MenuOpenOutlined'
+import MenuIcon from '@mui/icons-material/Menu';
 import PublishedWithChangesOutlinedIcon from '@mui/icons-material/PublishedWithChangesOutlined'
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined'
-import { Box, IconButton, Paper, useTheme } from '@mui/material'
+import { Box, IconButton, Paper, Typography, useTheme } from '@mui/material'
 import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import DropDownButton from './DropdownButton'
 import UserMenu from './UserMenu'
+import { useRouter } from 'next/router';
+import Image from "next/image";
+import NextLink from "next/link";
 
 const doesUserHaveAccess = () => {
   if (typeof window === 'undefined') {
@@ -28,6 +31,7 @@ export default function Topbar() {
   const theme = useTheme()
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const [userHasAccess, setUserHasAccess] = useState(false)
+  const router = useRouter();
 
   useEffect(() => {
     setUserHasAccess(doesUserHaveAccess())
@@ -36,6 +40,18 @@ export default function Topbar() {
   const handleMenuCollapseClick = () => {
     toggleSidebar()
   }
+
+  const getTitle = () => {
+    if (router.pathname.includes('/public-involvement/pi-tool/')) {
+      return 'PI Tool';
+    }else if (router.pathname.includes('/locations')) {
+      return 'Avenue Toolbelt';
+    }
+    // Add more conditions as needed
+    return 'Avenue Toolbelt';
+  };
+
+  const title = getTitle();
 
   const infoItems = [
     {
@@ -57,28 +73,28 @@ export default function Topbar() {
 
   const documentItems = [
     {
-      name: 'GDOT ATSPM Installation Manual',
-      icon: <InfoOutlinedIcon fontSize="small" />,
-      link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_Installation_Manual_4.3.pdf',
+      name: 'Request Tool Access',
+      icon: <QuestionAnswerOutlinedIcon fontSize="small" />,
+      link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_Methods_and_Assumptions_4.3.pdf',
     },
     {
-      name: 'GDOT ATSPM Component Details',
+      name: 'Squava Access',
+      link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_User%20Case%20Examples_Manual_20200128.pdf',
+    },
+    {
+      name: 'VPN Access',
+      icon: <InfoOutlinedIcon fontSize="small" />,
+      link: 'https://avenueconsultants.com/insights/',
+    },
+    {
+      name: 'Contact Uinta',
       icon: <InfoOutlinedIcon fontSize="small" />,
       link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_Component_Details_4.3.pdf',
     },
     {
-      name: 'GDOT ATSPM Reporting Details',
+      name: 'UDOT Resources',
       icon: <InfoOutlinedIcon fontSize="small" />,
       link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_Reporting_Details_4.3.pdf',
-    },
-    {
-      name: 'ATSPM User Case Examples Manual',
-      link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_User%20Case%20Examples_Manual_20200128.pdf',
-    },
-    {
-      name: 'Methods and Assumptions',
-      icon: <QuestionAnswerOutlinedIcon fontSize="small" />,
-      link: 'https://udottraffic.utah.gov/ATSPM/Images/ATSPM_Methods_and_Assumptions_4.3.pdf',
     },
   ]
 
@@ -95,8 +111,10 @@ export default function Topbar() {
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
-        p: 1,
+        alignItems: 'center',
+        paddingX: 2,
         borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+        
       }}
     >
       <Box
@@ -105,7 +123,6 @@ export default function Topbar() {
           alignItems: 'center',
           borderRadius: '3px',
           backgroundColor: theme.palette.background.paper,
-          marginY: '7px',
         }}
       >
         <Paper>
@@ -114,13 +131,40 @@ export default function Topbar() {
             onClick={handleMenuCollapseClick}
             sx={{
               p: 1,
-              transform: isSidebarOpen ? 'rotateY(0deg)' : 'rotateY(180deg)',
-              transition: 'transform 0.5s',
             }}
           >
-            <MenuOpenOutlinedIcon />
+            <MenuIcon />
           </IconButton>
         </Paper>
+
+      </Box>
+      <Box
+          sx={{
+
+          }}
+        >
+          <NextLink href="/" passHref>
+            <Image
+              alt="Ave Toolbelt"
+              src="/images/avelogo.svg"
+              priority
+              width={0}
+              height={0}
+              style={{ width: "70%", paddingLeft:'9px', paddingTop:'9px', height: "auto", cursor: "pointer" }}
+            />
+          </NextLink>
+        </Box>
+
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: theme.palette.mode === 'light' ? 'black' : 'white',
+        }}
+      >
+        <h3>{title}</h3>
       </Box>
 
       <Box
@@ -131,14 +175,9 @@ export default function Topbar() {
         }}
       >
         <DropDownButton
-          title="Tool"
+          title="Resources"
           icon={<InfoOutlinedIcon />}
           menuItems={documentItems}
-        />
-        <DropDownButton
-          title="Tool"
-          icon={<InfoOutlinedIcon />}
-          menuItems={infoItems}
         />
         {userHasAccess && (
           <DropDownButton
@@ -150,5 +189,5 @@ export default function Topbar() {
         <UserMenu />
       </Box>
     </Box>
-  )
+  );
 }
