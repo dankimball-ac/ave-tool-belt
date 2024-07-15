@@ -56,14 +56,16 @@ const DeleteModal: React.FC<CreateProjectModalProps> = ({
             Are you sure you want to delete this {objName.toLowerCase()}?
           </Typography>
           <br />
-          <Box sx={modalButtonLocation}>
-            <Button onClick={onClose}>No</Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end"}}>
             <Button
               //   onClick={() => handleDeleteClick(id)}
+            //   variant="contained"
               style={{ color: "red" }}
             >
               Delete {objName}
             </Button>
+            <Button onClick={onClose}>cancel</Button>
+
           </Box>
         </>
       </Box>

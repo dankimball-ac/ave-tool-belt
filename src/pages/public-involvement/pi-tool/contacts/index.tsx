@@ -13,7 +13,7 @@ import {
 import GenericNavBar from "@/components/GenericNavBar/GenericNavBar";
 import { ResponsivePageLayout } from "@/components/ResponsivePage";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
-import ForumIcon from '@mui/icons-material/Forum';
+import ForumIcon from "@mui/icons-material/Forum";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import CreateCustomerModal from "@/features/publicInvolvement/piTool/modals/createContactModal";
@@ -201,12 +201,19 @@ const Contacts: React.FC = () => {
     setIsDeleteModalOpen(false);
   };
 
-
   return (
     <>
       <GenericNavBar pages={pages} settings={settings} />
       <ResponsivePageLayout title={""}>
-        <Paper style={{ margin: 16, padding: 16 }}>
+        <Paper
+          style={{
+            margin: 16,
+            padding: 16,
+            maxHeight: "calc(100vh - 18vh)",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <TextField
             style={{ marginBottom: 16 }}
             fullWidth
@@ -222,54 +229,56 @@ const Contacts: React.FC = () => {
               marginBottom: 16,
               marginTop: 16,
               display: "flex",
-              justifyContent: "flex-end",
+              alignSelf: "flex-end",
             }}
             onClick={handleOpenCreateModal}
           >
             Create New
           </Button>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>First Name</TableCell>
-                <TableCell>Last Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredContacts.map((contact) => (
-                <TableRow key={contact.firstName}>
-                  <TableCell>{contact.lastName}</TableCell>
-                  <TableCell>{contact.email}</TableCell>
-                  <TableCell>{contact.phone}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="view"
-                      onClick={() => handleOpenDetailsModal(contact)}
-                    >
-                      <ManageSearchIcon />
-                    </IconButton>
-                    
-                    <IconButton aria-label="view">
-                      <ForumIcon />
-                    </IconButton>
-                    
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleOpenDeleteModal(contact)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton aria-label="download">
-                      <DownloadIcon />
-                    </IconButton>
-                  </TableCell>
+          <div style={{ flexGrow: 1, overflow: "auto" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Phone</TableCell>
+                  <TableCell align="right"></TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {filteredContacts.map((contact) => (
+                  <TableRow key={contact.firstName}>
+                    <TableCell>{contact.lastName}</TableCell>
+                    <TableCell>{contact.email}</TableCell>
+                    <TableCell>{contact.phone}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="view"
+                        onClick={() => handleOpenDetailsModal(contact)}
+                      >
+                        <ManageSearchIcon />
+                      </IconButton>
+
+                      <IconButton aria-label="view">
+                        <ForumIcon />
+                      </IconButton>
+
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleOpenDeleteModal(contact)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton aria-label="download">
+                        <DownloadIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </Paper>
       </ResponsivePageLayout>
       <CreateCustomerModal

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Box, TextField, Button, Typography } from "@mui/material";
-import Map from "@/components/map/Map"; // Make sure the path is correct
+import MapWrapper from "@/components/map/MapWrapper"; 
 import ModalWrapper from "@/components/ModalWrapper";
 
 interface CreateProjectModalProps {
@@ -83,7 +83,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
         </Box>
       </Box>
       <Box sx={{ flex: 2, height: "auto" }}>
-        <Map zoom={9} mapHeight="100%" />
+        <MapWrapper zoom={9} mapHeight="100%" />
       </Box>
     </ModalWrapper>
   );

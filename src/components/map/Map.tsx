@@ -21,7 +21,6 @@ const Map = ({
 }: MapProps) => {
   const theme = useTheme()
   const [mapRef, setMapRef] = useState<LeafletMap | null>(null)
-  const [isPopperOpen, setIsPopperOpen] = useState(false)
   const filtersButtonRef = useRef(null)
   useEffect(() => {
     if (!mapRef) return
@@ -46,7 +45,7 @@ const Map = ({
       zoom={zoom || 6}
       scrollWheelZoom={true}
       style={{
-        height: mapHeight || 'calc(100% - 80px)',
+        height: mapHeight || 'calc(100% - 40px)',
         minHeight: '400px',
         width: '100%',
       }}

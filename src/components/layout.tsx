@@ -60,9 +60,7 @@ export default function Layout({ children }: LayoutProps) {
         >
           {children}
         </Box>
-        <Box component="nav">
         <Sidebar />
-      </Box>
         <Toast />
       </Box>
     </Box>

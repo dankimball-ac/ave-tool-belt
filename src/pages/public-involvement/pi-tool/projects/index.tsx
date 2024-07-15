@@ -9,6 +9,7 @@ import {
   Paper,
   TextField,
   IconButton,
+  Link,
 } from "@mui/material";
 import GenericNavBar from "@/components/GenericNavBar/GenericNavBar";
 import { ResponsivePageLayout } from "@/components/ResponsivePage";
@@ -125,7 +126,15 @@ const Projects: React.FC = () => {
     <>
       <GenericNavBar pages={pages} settings={settings} />
       <ResponsivePageLayout title={""}>
-        <Paper style={{ margin: 16, padding: 16 }}>
+        <Paper
+          style={{
+            margin: 16,
+            padding: 16,
+            maxHeight: "calc(100vh - 18vh)",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <TextField
             style={{ marginBottom: 16 }}
             fullWidth
@@ -133,55 +142,64 @@ const Projects: React.FC = () => {
             variant="outlined"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-          />{" "}
+          />
           <Button
             variant="contained"
             color="primary"
             style={{
               marginBottom: 16,
               marginTop: 16,
-              display: "flex",
-              justifyContent: "flex-end",
+              alignSelf: "flex-end",
             }}
             onClick={handleOpenCreateModal}
           >
             Create New
           </Button>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Number</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredProjects.map((project) => (
-                <TableRow key={project.number}>
-                  <TableCell>{project.number}</TableCell>
-                  <TableCell>{project.name}</TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      aria-label="view"
-                      onClick={() => handleOpenDetailsModal(project)}
-                    >
-                      <ManageSearchIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleOpenDeleteModal(project)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-
-                    <IconButton aria-label="download">
-                      <DownloadIcon />
-                    </IconButton>
-                  </TableCell>
+          <div style={{ flexGrow: 1, overflow: "auto" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Number</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {filteredProjects.map((project) => (
+                  <TableRow key={project.number}>
+                    <TableCell >
+                      <Link  style={{  textDecoration: 'none', color: 'inherit'}} href="/public-involvement/pi-tool/projects">
+                        <a>{project.number}</a>
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link  style={{  textDecoration: 'none', color: 'inherit'}} href="/public-involvement/pi-tool/project">
+                        <a>{project.name}</a>
+                      </Link>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        aria-label="view"
+                        onClick={() => handleOpenDetailsModal(project)}
+                      >
+                        <ManageSearchIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleOpenDeleteModal(project)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+
+                      <IconButton aria-label="download">
+                        <DownloadIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </Paper>
       </ResponsivePageLayout>
       <CreateProjectModal

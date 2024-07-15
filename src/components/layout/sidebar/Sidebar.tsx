@@ -143,7 +143,7 @@ export default function Sidebar() {
   return (
     <Box
       sx={{
-        height: "100vh",
+      
         width: isMobile ? "auto" : isSidebarOpen ? "270px" : "0px",
         transition: "width 0.2s ease-out",
         overflow: "hidden",
