@@ -1,21 +1,33 @@
 import React, { useState } from "react";
-import { Modal, Box, TextField, Button, Typography } from "@mui/material";
+import {
+  Modal,
+  Box,
+  TextField,
+  Button,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  Chip,
+  MenuItem,
+  Checkbox,
+} from "@mui/material";
 import Map from "@/components/map/Map"; // Make sure the path is correct
 import ModalWrapper from "@/components/ModalWrapper";
 import { add } from "date-fns";
-import {Contact} from '@/features/publicInvolvement/piTool/types';
+import { Contact, Project } from "@/features/publicInvolvement/piTool/types";
+import { projectsData } from "@/pages/public-involvement/pi-tool/mockdata";
 
 interface CreateProjectModalProps {
   open: boolean;
   onClose: () => void;
   contactObj: Contact;
-
 }
 
 const ContactDetailsModal: React.FC<CreateProjectModalProps> = ({
   open,
   onClose,
-  contactObj
+  contactObj,
 }) => {
   const [firstName, setFirstName] = useState(contactObj.firstName);
   const [lastName, setLastName] = useState(contactObj.lastName);
@@ -32,9 +44,7 @@ const ContactDetailsModal: React.FC<CreateProjectModalProps> = ({
   const [state, setState] = useState(contactObj.state);
   const [zipCode, setZipCode] = useState(contactObj.zipCode);
   const [isEditing, setIsEditing] = useState(false);
-
-
-
+  const disabledInputColor = "rgba(0, 0, 0, 0.75)";
   const handleSave = () => {
     setIsEditing(false);
     onClose();
@@ -44,136 +54,242 @@ const ContactDetailsModal: React.FC<CreateProjectModalProps> = ({
     setIsEditing(true);
   };
 
+  //api call for all projects
+  const allProjectData: Project[] = projectsData;
+
+  const allProjects = allProjectData.map((project) => {
+    return project.name;
+  });
+
   return (
     <ModalWrapper open={open} onClose={onClose}>
-        <Box>
+      <Box>
         <Typography variant="h4" component="h2" gutterBottom>
           New Customer
         </Typography>
-       
-      <Box sx={{display:'flex', flexDirection:'row'}}>
-      <Box sx={{ flex: 1, mr: 2 }}>
-        <TextField
-          fullWidth
-          label="first Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-        <TextField
-          fullWidth
-          label="last Name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-        <TextField
-          fullWidth
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-        <TextField
-          fullWidth
-          label="Phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-        <TextField
-          fullWidth
-          label="Type"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                <TextField
-          fullWidth
-          label="Organization"
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-         </Box>
 
-              <Box sx={{ flex: 1, height: "auto" }}>
-      <TextField
-          fullWidth
-          label="Project(s)"
-          value={projects}
-          onChange={(e) => setProjects([e.target.value])}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="Mobile/Direct Phone"
-          value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="Address Line 1"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="Address Line 2"
-          value={secondAddress}
-          onChange={(e) => setSecondAddress(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="City"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="State"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-                        <TextField
-          fullWidth
-          label="Zip Code"
-          value={zipCode}
-          onChange={(e) => setZipCode(e.target.value)}
-          margin="normal"
-          disabled={!isEditing}
-        />
-      </Box>
-      </Box>
- 
-     
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Box sx={{ flex: 1, mr: 2 }}>
+            <TextField
+              fullWidth
+              label="first Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Organization"
+              value={organization}
+              onChange={(e) => setOrganization(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+          </Box>
 
-      <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+          <Box sx={{ flex: 1, height: "auto" }}>
+            <TextField
+              fullWidth
+              label="Mobile/Direct Phone"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Address Line 1"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Address Line 2"
+              value={secondAddress}
+              onChange={(e) => setSecondAddress(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="State"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Zip Code"
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+              margin="normal"
+              disabled={!isEditing}
+              sx={{
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: disabledInputColor,
+                  color: disabledInputColor,
+                },
+              }}
+            />
+          </Box>
+        </Box>
+        <FormControl fullWidth margin="dense">
+          <InputLabel>Project(s)</InputLabel>
+          <Select
+            sx={{
+              "& .MuiInputBase-input.Mui-disabled": {
+                WebkitTextFillColor: disabledInputColor,
+                color: disabledInputColor,
+              },
+            }}
+            disabled={!isEditing}
+            multiple
+            label="Projects"
+            value={contactObj.projects}
+            // onChange={handleProjectChange}
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}
+          >
+            {allProjects
+              ?.sort((a, b) => a.localeCompare(b))
+              .map((project) => (
+                <MenuItem key={project} value={project}>
+                  <Checkbox checked={contactObj.projects?.includes(project)} />
+                  {project}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
           {isEditing ? (
             <>
               <Button variant="contained" onClick={handleSave} sx={{ mr: 1 }}>
@@ -190,7 +306,7 @@ const ContactDetailsModal: React.FC<CreateProjectModalProps> = ({
             </>
           )}
         </Box>
-        </Box>
+      </Box>
     </ModalWrapper>
   );
 };

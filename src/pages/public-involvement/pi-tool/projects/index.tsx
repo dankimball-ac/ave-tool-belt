@@ -20,50 +20,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Project } from "@/features/publicInvolvement/piTool/types";
 import DeleteModal from "@/components/modals/DeleteModal";
-const projects: Project[] = [
-  {
-    number: "00-000",
-    name: "Highway 89 Expansion",
-    client: "UDOT Region 1",
-    startDate: "2024-01-01",
-    endDate: "2025-01-01",
-  },
-  {
-    number: "00-001",
-    name: "I-15 Bridge Repair",
-    client: "UDOT Region 2",
-    startDate: "2024-03-15",
-    endDate: "2024-11-30",
-  },
-  {
-    number: "00-002",
-    name: "US-6 Safety Improvements",
-    client: "UDOT Region 3",
-    startDate: "2024-05-01",
-    endDate: "2025-09-30",
-  },
-  {
-    number: "00-003",
-    name: "SR-201 Resurfacing",
-    client: "UDOT Region 2",
-    startDate: "2024-07-01",
-    endDate: "2024-10-31",
-  },
-  {
-    number: "00-004",
-    name: "I-80 Wildlife Crossing",
-    client: "UDOT Region 1",
-    startDate: "2024-09-01",
-    endDate: "2025-08-31",
-  },
-  {
-    number: "01-005",
-    name: "US-40 Intersection Upgrade",
-    client: "UDOT Region 3",
-    startDate: "2024-04-15",
-    endDate: "2024-12-15",
-  },
-];
+import { projectsData } from "../mockdata";
+
+let projects:Project[] = projectsData;
 
 const pages = [
   { name: "Projects", link: "/public-involvement/pi-tool/projects" },
@@ -130,7 +89,7 @@ const Projects: React.FC = () => {
           style={{
             margin: 16,
             padding: 16,
-            maxHeight: "calc(100vh - 18vh)",
+            height: "calc(100vh - 18vh)",
             display: "flex",
             flexDirection: "column",
           }}
@@ -167,13 +126,19 @@ const Projects: React.FC = () => {
               <TableBody>
                 {filteredProjects.map((project) => (
                   <TableRow key={project.number}>
-                    <TableCell >
-                      <Link  style={{  textDecoration: 'none', color: 'inherit'}} href="/public-involvement/pi-tool/projects">
+                    <TableCell>
+                      <Link
+                        style={{ textDecoration: "none", color: "inherit" }}
+                        href="/public-involvement/pi-tool/projects"
+                      >
                         <a>{project.number}</a>
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <Link  style={{  textDecoration: 'none', color: 'inherit'}} href="/public-involvement/pi-tool/project">
+                      <Link
+                        style={{ textDecoration: "none", color: "inherit" }}
+                        href="/public-involvement/pi-tool/project"
+                      >
                         <a>{project.name}</a>
                       </Link>
                     </TableCell>
